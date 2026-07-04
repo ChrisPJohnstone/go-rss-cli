@@ -11,6 +11,7 @@ import (
 
 type Config struct {
 	Verbose bool
+	URL     string
 }
 
 func parseConfig() (Config, error) {
@@ -43,7 +44,11 @@ func parseConfig() (Config, error) {
 		}
 		input = args
 	}
-	fmt.Println(input)
+	// TODO: Depending how implementation shakes out could accept multiple inputs
+	if len(input) > 1 {
+		return Config{}, fmt.Errorf("expected one positional arg")
+	}
+	config.URL = input[0]
 	return config, nil
 }
 
