@@ -7,39 +7,59 @@ import (
 	"log"
 	"os"
 	"strings"
-	// "github.com/ChrisPJohnstone/go-rss-client"
 )
 
-func getInput() ([]string, error) {
+type Config struct {
+	Verbose bool
+}
+
+func parseConfig() (Config, error) {
+	var verbose bool
+	flag.BoolVar(&verbose, "v", false, "enable verbose logging")
+	flag.Parse()
+	config := Config{Verbose: verbose}
+	if config.Verbose {
+		log.Printf("Verbose logging enabled")
+	}
 	stat, _ := os.Stdin.Stat()
 	hasStdin := (stat.Mode() & os.ModeCharDevice) == 0
 	args := flag.Args()
 	if hasStdin && len(args) > 0 {
-		return nil, fmt.Errorf("accepts input from stdin OR positional arg, not both")
+		return Config{}, fmt.Errorf("accepts input from stdin OR positional arg, not both")
 	}
+	var input []string
 	if hasStdin {
+		if config.Verbose {
+			log.Printf("Reading input from stdin")
+		}
 		bytes, err := io.ReadAll(os.Stdin)
 		if err != nil {
-			return nil, err
+			return Config{}, err
 		}
-		return strings.Fields(string(bytes)), nil
+		input = strings.Fields(string(bytes))
+	} else {
+		if config.Verbose {
+			log.Printf("Reading input from positional args")
+		}
+		input = args
 	}
-	return args, nil
+	fmt.Println(input)
+	return config, nil
+}
+
+func run(config Config) error {
+	if config.Verbose {
+		log.Printf("input: %v", config)
+	}
+	return nil
 }
 
 func main() {
-	flag.Parse()
-	input, err := getInput()
+	config, err := parseConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(input)
-	// TODO: parse input
-
-	// var url string = "https://feeds.bbci.co.uk/news/rss.xml"
-	// feed, err := rssclient.FetchFeed(url)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	// fmt.Println(feed)
+	if err := run(config); err != nil {
+		log.Fatal(err)
+	}
 }
