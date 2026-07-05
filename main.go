@@ -63,5 +63,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(feed)
+	titles := make([]string, len(feed.Items))
+	for i, item := range feed.Items {
+		titles[i] = item.Title
+	}
+	fmt.Println(len(titles))
 }
