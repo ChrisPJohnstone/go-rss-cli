@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"strings"
+
+	"github.com/ChrisPJohnstone/go-rss-client"
 )
 
 type Config struct {
@@ -20,7 +22,7 @@ func parseConfig() (Config, error) {
 	flag.Parse()
 	config := Config{Verbose: verbose}
 	if config.Verbose {
-		log.Printf("Verbose logging enabled")
+		log.Printf("verbose logging enabled")
 	}
 	stat, _ := os.Stdin.Stat()
 	hasStdin := (stat.Mode() & os.ModeCharDevice) == 0
@@ -31,7 +33,7 @@ func parseConfig() (Config, error) {
 	var input []string
 	if hasStdin {
 		if config.Verbose {
-			log.Printf("Reading input from stdin")
+			log.Printf("reading input from stdin")
 		}
 		bytes, err := io.ReadAll(os.Stdin)
 		if err != nil {
@@ -40,7 +42,7 @@ func parseConfig() (Config, error) {
 		input = strings.Fields(string(bytes))
 	} else {
 		if config.Verbose {
-			log.Printf("Reading input from positional args")
+			log.Printf("reading input from positional args")
 		}
 		input = args
 	}
@@ -52,19 +54,14 @@ func parseConfig() (Config, error) {
 	return config, nil
 }
 
-func run(config Config) error {
-	if config.Verbose {
-		log.Printf("input: %v", config)
-	}
-	return nil
-}
-
 func main() {
 	config, err := parseConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	if err := run(config); err != nil {
+	feed, err := rssclient.FetchFeed(config.URL)
+	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(feed)
 }
