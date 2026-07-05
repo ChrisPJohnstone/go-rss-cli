@@ -11,34 +11,42 @@ import (
 )
 
 type opts struct {
-	verbose    bool
-	configPath string
-	url        string
+	verbose bool
+	dir     string
+	url     string
+}
+
+func defaultDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, ".rss-cli"), nil
 }
 
 func parseOpts() (opts, error) {
 	var verbose bool
-	var configPath string
+	var dir string
 	flag.BoolVar(&verbose, "v", false, "enable verbose logging")
-	flag.StringVar(&configPath, "config-path", "", "path to config file")
+	flag.StringVar(&dir, "dir", "", "directory to store config & files")
 	flag.Parse()
-	config := opts{verbose: verbose}
-	if config.verbose {
+	o := opts{verbose: verbose}
+	if o.verbose {
 		log.Printf("verbose logging enabled")
 	}
-	if configPath == "" {
-		if config.verbose {
-			log.Printf("getting default config path")
+	if dir == "" {
+		if o.verbose {
+			log.Printf("getting default directory")
 		}
-		home, err := os.UserHomeDir()
+		defaultDir, err := defaultDir()
 		if err != nil {
-			return opts{}, fmt.Errorf("cannot determine home directory: %w", err)
+			return opts{}, err
 		}
-		configPath = filepath.Join(home, ".rss-cli", "config")
+		dir = defaultDir
 	}
-	config.configPath = configPath
-	if config.verbose {
-		log.Printf("config path set to %s", config.configPath)
+	o.dir = dir
+	if o.verbose {
+		log.Printf("directory set to %s", o.dir)
 	}
 	stat, _ := os.Stdin.Stat()
 	hasStdin := (stat.Mode() & os.ModeCharDevice) == 0
@@ -48,7 +56,7 @@ func parseOpts() (opts, error) {
 	}
 	var input []string
 	if hasStdin {
-		if config.verbose {
+		if o.verbose {
 			log.Printf("reading input from stdin")
 		}
 		bytes, err := io.ReadAll(os.Stdin)
@@ -57,7 +65,7 @@ func parseOpts() (opts, error) {
 		}
 		input = strings.Fields(string(bytes))
 	} else {
-		if config.verbose {
+		if o.verbose {
 			log.Printf("reading input from positional args")
 		}
 		input = args
@@ -66,6 +74,6 @@ func parseOpts() (opts, error) {
 	if len(input) > 1 {
 		return opts{}, fmt.Errorf("expected one positional arg")
 	}
-	config.url = input[0]
-	return config, nil
+	o.url = input[0]
+	return o, nil
 }
