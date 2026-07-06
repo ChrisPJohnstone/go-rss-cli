@@ -11,20 +11,16 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "rss",
-	Short: "Fast & Minimal Feed Reader",
+	Use:               "rss",
+	Short:             "Fast & Minimal Feed Reader",
+	PersistentPreRunE: internal.LoadConfig,
 }
-
-var (
-	verbose bool
-	toolDir string
-)
 
 func init() {
 	defaultDir, err := internal.DefaultDir()
 	cobra.CheckErr(err)
-	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose logging")
-	rootCmd.PersistentFlags().StringVarP(&toolDir, internal.ToolDirArg, "", defaultDir, "Directory to store config & files")
+	rootCmd.PersistentFlags().BoolVarP(&internal.Verbose, "verbose", "v", false, "Enable verbose logging")
+	rootCmd.PersistentFlags().StringVarP(&internal.ToolDir, internal.ToolDirArg, "", defaultDir, "Directory to store config & files")
 	rootCmd.AddCommand(feed.FeedCmd)
 }
 
