@@ -2,6 +2,8 @@
 
 An RSS Reader for the CLI
 
+CLI powered by [cobra](https://github.com/spf13/cobra)
+
 ## Design Scribbles
 
 - Need some kind of persistent store
