@@ -1,4 +1,4 @@
-package cmd
+package internal
 
 import (
 	"os"
@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func defaultDir() (string, error) {
+func DefaultDir() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err

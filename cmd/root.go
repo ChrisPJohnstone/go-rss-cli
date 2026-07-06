@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/ChrisPJohnstone/go-rss-cli/cmd/feed"
+	"github.com/ChrisPJohnstone/go-rss-cli/internal"
 )
 
 var rootCmd = &cobra.Command{
@@ -20,10 +21,10 @@ var (
 )
 
 func init() {
-	defaultDir, err := defaultDir()
+	defaultDir, err := internal.DefaultDir()
 	cobra.CheckErr(err)
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose logging")
-	rootCmd.PersistentFlags().StringVarP(&toolDir, toolDirArg, "", defaultDir, "Directory to store config & files")
+	rootCmd.PersistentFlags().StringVarP(&toolDir, internal.ToolDirArg, "", defaultDir, "Directory to store config & files")
 	rootCmd.AddCommand(feed.FeedCmd)
 }
 
