@@ -14,7 +14,16 @@ var rootCmd = &cobra.Command{
 	Short: "Fast & Minimal Feed Reader",
 }
 
+var (
+	verbose bool
+	toolDir string
+)
+
 func init() {
+	defaultDir, err := defaultDir()
+	cobra.CheckErr(err)
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Enable verbose logging")
+	rootCmd.PersistentFlags().StringVarP(&toolDir, toolDirArg, "", defaultDir, "Directory to store config & files")
 	rootCmd.AddCommand(feed.FeedCmd)
 }
 

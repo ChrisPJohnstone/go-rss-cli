@@ -1,6 +1,10 @@
 package feed
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+
+	"github.com/spf13/cobra"
+)
 
 var FeedCmd = &cobra.Command{
 	Use:   "feed [command]",
@@ -12,22 +16,24 @@ var addFeedCmd = &cobra.Command{
 	Use:   "add [url]",
 	Short: "Add a new feed",
 	Args:  cobra.MinimumNArgs(1),
-	Run:   addFeed,
+	RunE:  addFeed,
 }
 
 var rmFeedCmd = &cobra.Command{
 	Use:   "rm [url]",
 	Short: "Remove a feed",
 	Args:  cobra.MinimumNArgs(1),
-	Run:   rmFeed,
+	RunE:  rmFeed,
 }
 
 func init() {
 	FeedCmd.AddCommand(addFeedCmd, rmFeedCmd)
 }
 
-func addFeed(cmd *cobra.Command, args []string) {
+func addFeed(cmd *cobra.Command, args []string) error {
+	return fmt.Errorf("not implemented")
 }
 
-func rmFeed(cmd *cobra.Command, args []string) {
+func rmFeed(cmd *cobra.Command, args []string) error {
+	return fmt.Errorf("not implemented")
 }
