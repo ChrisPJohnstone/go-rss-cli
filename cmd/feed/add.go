@@ -1,6 +1,7 @@
 package feed
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/spf13/cobra"
@@ -20,7 +21,9 @@ func addFeed(cmd *cobra.Command, args []string) error {
 	if internal.Verbose {
 		log.Printf("Adding url %s to feeds", url)
 	}
-	// TODO: Check for duplicates
+	if hasFeed(url) {
+		return fmt.Errorf("feed %q already exists", url)
+	}
 	internal.Cfg.Feeds = append(internal.Cfg.Feeds, url)
 	err := internal.WriteConfig()
 	return err
