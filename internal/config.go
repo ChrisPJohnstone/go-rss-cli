@@ -14,20 +14,16 @@ type Config struct {
 	Feeds []string `yaml:"feeds"`
 }
 
-func LoadConfig(cmd *cobra.Command, args []string) error {
-	path := filepath.Join(ToolDir, configFilename)
+func configPath() string {
+	return filepath.Join(ToolDir, configFilename)
+}
+
+func ReadConfig(cmd *cobra.Command, args []string) error {
+	path := configPath()
 	if Verbose {
 		log.Println("Reading config from ", path)
 	}
-	if _, err := os.Stat(ToolDir); os.IsNotExist(err) {
-		if Verbose {
-			log.Printf("Config dir not found, creating %s", ToolDir)
-		}
-		err := os.MkdirAll(ToolDir, os.ModePerm)
-		if err != nil {
-			return err
-		}
-	}
+	ensureDir(ToolDir)
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		if Verbose {
 			log.Printf("Config file not found, creating default %s", path)
@@ -46,4 +42,17 @@ func LoadConfig(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	return nil
+}
+
+func WriteConfig(cmd *cobra.Command, args []string) error {
+	path := configPath()
+	if Verbose {
+		log.Println("Writing config to ", path)
+	}
+	ensureDir(ToolDir)
+	raw, err := yaml.Marshal(&Cfg)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, raw, 0644)
 }

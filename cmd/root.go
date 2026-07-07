@@ -12,7 +12,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:               "rss",
 	Short:             "Fast & Minimal Feed Reader",
-	PersistentPreRunE: internal.LoadConfig,
+	PersistentPreRunE: internal.ReadConfig,
 }
 
 func init() {
