@@ -9,5 +9,5 @@ var FeedCmd = &cobra.Command{
 }
 
 func init() {
-	FeedCmd.AddCommand(addFeedCmd, rmFeedCmd)
+	FeedCmd.AddCommand(listFeedCmd, addFeedCmd, rmFeedCmd)
 }
