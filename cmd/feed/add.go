@@ -1,7 +1,7 @@
 package feed
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/spf13/cobra"
 
@@ -16,6 +16,12 @@ var addFeedCmd = &cobra.Command{
 }
 
 func addFeed(cmd *cobra.Command, args []string) error {
-	fmt.Println(internal.Cfg)
-	return fmt.Errorf("not implemented")
+	url := args[0]
+	if internal.Verbose {
+		log.Printf("Adding url %s to feeds", url)
+	}
+	// TODO: Check for duplicates
+	internal.Cfg.Feeds = append(internal.Cfg.Feeds, url)
+	err := internal.WriteConfig()
+	return err
 }

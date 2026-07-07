@@ -44,7 +44,7 @@ func ReadConfig(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func WriteConfig(cmd *cobra.Command, args []string) error {
+func WriteConfig() error {
 	path := configPath()
 	if Verbose {
 		log.Println("Writing config to ", path)
