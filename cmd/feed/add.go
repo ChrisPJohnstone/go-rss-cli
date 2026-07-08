@@ -11,9 +11,10 @@ import (
 
 var addFeedCmd = &cobra.Command{
 	Use:   "add [url]",
-	Short: "Add a new feed",
-	Args:  cobra.MinimumNArgs(1),
-	RunE:  addFeed,
+	Short: "Follow a feed",
+	// TODO: Support multi-arg
+	Args: cobra.MinimumNArgs(1),
+	RunE: addFeed,
 }
 
 func addFeed(cmd *cobra.Command, args []string) error {

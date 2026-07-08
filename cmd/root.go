@@ -20,7 +20,7 @@ func init() {
 	cobra.CheckErr(err)
 	rootCmd.PersistentFlags().BoolVarP(&internal.Verbose, "verbose", "v", false, "Enable verbose logging")
 	rootCmd.PersistentFlags().StringVarP(&internal.ToolDir, internal.ToolDirArg, "", defaultDir, "Directory to store config & files")
-	rootCmd.AddCommand(feed.FeedCmd)
+	rootCmd.AddCommand(feed.FeedCmd, pullCmd)
 }
 
 func Execute() {

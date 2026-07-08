@@ -10,7 +10,7 @@ import (
 
 var listFeedCmd = &cobra.Command{
 	Use:   "ls",
-	Short: "List feeds",
+	Short: "List followed feeds",
 	RunE:  listFeeds,
 }
 
