@@ -5,7 +5,7 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/ChrisPJohnstone/go-rss-client"
+	"github.com/ChrisPJohnstone/go-rss-client/v2"
 	_ "github.com/mattn/go-sqlite3"
 )
 

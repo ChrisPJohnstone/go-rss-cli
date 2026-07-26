@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/ChrisPJohnstone/go-rss-client"
+	"github.com/ChrisPJohnstone/go-rss-client/v2"
 	"github.com/spf13/cobra"
 
 	"github.com/ChrisPJohnstone/go-rss-cli/internal"
@@ -14,7 +14,8 @@ var pullCmd = &cobra.Command{
 }
 
 func pullFeed(url string) error {
-	feed, err := rssclient.FetchFeed(url)
+	feed, _, err := rssclient.FetchFeed(url, nil)
+	// TODO: Use ETag & LastModified to pass when no changes
 	if err != nil {
 		return err
 	}
