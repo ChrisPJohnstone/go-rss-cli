@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/ChrisPJohnstone/go-rss-client"
 	"github.com/spf13/cobra"
 
@@ -21,13 +19,16 @@ func pullFeed(url string) error {
 		return err
 	}
 	for _, item := range feed.Items {
-		// TODO: Write somewhere
-		fmt.Println(item.Title)
+		internal.InsertArticle(url, item)
 	}
 	return nil
 }
 
 func pullAll(cmd *cobra.Command, args []string) error {
+	err := internal.InitDB()
+	if err != nil {
+		return err
+	}
 	for _, f := range internal.Cfg.Feeds {
 		// TODO: Make async
 		err := pullFeed(f)

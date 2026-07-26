@@ -2,7 +2,18 @@
 
 An RSS Reader for the CLI
 
-CLI powered by [cobra](https://github.com/spf13/cobra)
+## Dependencies
+
+> [!NOTE]
+> This project uses [go-sqlite3](https://github.com/mattn/go-sqlite3), which requires CGO. On native platform builds this is enabled by default — no action needed. If you're cross-compiling, ensure `CGO_ENABLED=1` is set.
+
+- [gcc](https://gcc.gnu.org/) C Compiler
+- [sqlite3](https://sqlite.org/index.html) Database Engine
+
+## Libraries
+
+- [cobra](https://github.com/spf13/cobra) CLI Framework
+- [go-sqlite3](https://github.com/mattn/go-sqlite3#installation) Database
 
 ## Design Scribbles
 
